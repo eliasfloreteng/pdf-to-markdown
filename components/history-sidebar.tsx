@@ -1,0 +1,89 @@
+"use client"
+
+import { useState } from "react"
+import { FileText, ChevronLeft, ChevronRight, Clock } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import type { ProcessedDocument } from "@/lib/types"
+
+interface HistorySidebarProps {
+  history: ProcessedDocument[]
+  onSelect: (doc: ProcessedDocument) => void
+  selectedId?: string
+}
+
+export function HistorySidebar({ history, onSelect, selectedId }: HistorySidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
+  if (history.length === 0) return null
+
+  return (
+    <aside
+      className={cn(
+        "border-r border-border bg-sidebar transition-all duration-300 flex-shrink-0",
+        isCollapsed ? "w-0" : "w-64",
+      )}
+    >
+      <div className={cn("h-full flex flex-col", isCollapsed && "hidden")}>
+        <div className="p-4 border-b border-sidebar-border flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sidebar-foreground">
+            <Clock className="w-4 h-4" />
+            <span className="font-semibold text-sm">History</span>
+          </div>
+
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsCollapsed(true)}>
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+          {history.map((doc) => (
+            <button
+              key={doc.id}
+              onClick={() => onSelect(doc)}
+              className={cn(
+                "w-full p-3 rounded-lg text-left transition-colors",
+                selectedId === doc.id
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "hover:bg-sidebar-accent/50 text-sidebar-foreground",
+              )}
+            >
+              <div className="flex items-start gap-2">
+                <FileText className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm truncate">{doc.name}</div>
+                  <div className="text-xs text-sidebar-foreground/60 mt-1">{formatRelativeTime(doc.timestamp)}</div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {isCollapsed && (
+        <div className="h-full flex items-start p-2">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsCollapsed(false)}>
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
+    </aside>
+  )
+}
+
+function formatRelativeTime(date: Date): string {
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+
+  if (diffMins < 1) return "Just now"
+  if (diffMins < 60) return `${diffMins}m ago`
+
+  const diffHours = Math.floor(diffMins / 60)
+  if (diffHours < 24) return `${diffHours}h ago`
+
+  const diffDays = Math.floor(diffHours / 24)
+  if (diffDays < 7) return `${diffDays}d ago`
+
+  return date.toLocaleDateString()
+}
