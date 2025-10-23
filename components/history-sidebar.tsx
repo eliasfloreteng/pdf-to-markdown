@@ -12,7 +12,11 @@ interface HistorySidebarProps {
   selectedId?: string
 }
 
-export function HistorySidebar({ history, onSelect, selectedId }: HistorySidebarProps) {
+export function HistorySidebar({
+  history,
+  onSelect,
+  selectedId,
+}: HistorySidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   if (history.length === 0) return null
@@ -21,7 +25,7 @@ export function HistorySidebar({ history, onSelect, selectedId }: HistorySidebar
     <aside
       className={cn(
         "border-r border-border bg-sidebar transition-all duration-300 flex-shrink-0",
-        isCollapsed ? "w-0" : "w-64",
+        isCollapsed ? "w-0" : "w-64"
       )}
     >
       <div className={cn("h-full flex flex-col", isCollapsed && "hidden")}>
@@ -31,7 +35,12 @@ export function HistorySidebar({ history, onSelect, selectedId }: HistorySidebar
             <span className="font-semibold text-sm">History</span>
           </div>
 
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsCollapsed(true)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => setIsCollapsed(true)}
+          >
             <ChevronLeft className="w-4 h-4" />
           </Button>
         </div>
@@ -45,14 +54,16 @@ export function HistorySidebar({ history, onSelect, selectedId }: HistorySidebar
                 "w-full p-3 rounded-lg text-left transition-colors",
                 selectedId === doc.id
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "hover:bg-sidebar-accent/50 text-sidebar-foreground",
+                  : "hover:bg-sidebar-accent/50 text-sidebar-foreground"
               )}
             >
               <div className="flex items-start gap-2">
                 <FileText className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm truncate">{doc.name}</div>
-                  <div className="text-xs text-sidebar-foreground/60 mt-1">{formatRelativeTime(doc.timestamp)}</div>
+                  <div className="text-xs text-sidebar-foreground/60 mt-1">
+                    {formatRelativeTime(doc.timestamp)}
+                  </div>
                 </div>
               </div>
             </button>
@@ -62,7 +73,12 @@ export function HistorySidebar({ history, onSelect, selectedId }: HistorySidebar
 
       {isCollapsed && (
         <div className="h-full flex items-start p-2">
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsCollapsed(false)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => setIsCollapsed(false)}
+          >
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>

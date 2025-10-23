@@ -46,10 +46,13 @@ export function ProcessingView({ files }: ProcessingViewProps) {
           </div>
 
           <h2 className="text-2xl font-semibold text-foreground">
-            Processing {files.length} {files.length === 1 ? "document" : "documents"}
+            Processing {files.length}{" "}
+            {files.length === 1 ? "document" : "documents"}
           </h2>
 
-          <p className="text-muted-foreground">Using Mistral AI to extract content with 99% accuracy</p>
+          <p className="text-muted-foreground">
+            Using Mistral AI to extract content with 99% accuracy
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -63,14 +66,21 @@ export function ProcessingView({ files }: ProcessingViewProps) {
 
         <div className="space-y-3">
           {files.map((file, index) => (
-            <div key={index} className="flex items-center gap-3 p-4 rounded-lg bg-card border border-border">
+            <div
+              key={index}
+              className="flex items-center gap-3 p-4 rounded-lg bg-card border border-border"
+            >
               <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
                 <FileText className="w-5 h-5 text-secondary-foreground" />
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-foreground truncate">{file.name}</div>
-                <div className="text-sm text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                <div className="font-medium text-foreground truncate">
+                  {file.name}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                </div>
               </div>
 
               <div className="flex-shrink-0">

@@ -19,14 +19,15 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
       setIsDragging(false)
 
       const files = Array.from(e.dataTransfer.files).filter(
-        (file) => file.type === "application/pdf" || file.type.startsWith("image/"),
+        (file) =>
+          file.type === "application/pdf" || file.type.startsWith("image/")
       )
 
       if (files.length > 0) {
         onFilesSelected(files)
       }
     },
-    [onFilesSelected],
+    [onFilesSelected]
   )
 
   const handleFileInput = useCallback(
@@ -36,7 +37,7 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
         onFilesSelected(files)
       }
     },
-    [onFilesSelected],
+    [onFilesSelected]
   )
 
   return (
@@ -52,7 +53,7 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
           "relative border-2 border-dashed rounded-2xl p-12 transition-all duration-200",
           isDragging
             ? "border-accent bg-accent/10 scale-[1.02]"
-            : "border-border hover:border-accent/50 hover:bg-accent/5",
+            : "border-border hover:border-accent/50 hover:bg-accent/5"
         )}
       >
         <input
@@ -64,19 +65,28 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
           onChange={handleFileInput}
         />
 
-        <label htmlFor="file-upload" className="flex flex-col items-center cursor-pointer">
+        <label
+          htmlFor="file-upload"
+          className="flex flex-col items-center cursor-pointer"
+        >
           <div
             className={cn(
               "w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-colors",
-              isDragging ? "bg-accent text-accent-foreground" : "bg-secondary text-secondary-foreground",
+              isDragging
+                ? "bg-accent text-accent-foreground"
+                : "bg-secondary text-secondary-foreground"
             )}
           >
             <Upload className="w-8 h-8" />
           </div>
 
-          <h3 className="text-xl font-semibold text-foreground mb-2">Drop your files here</h3>
+          <h3 className="text-xl font-semibold text-foreground mb-2">
+            Drop your files here
+          </h3>
 
-          <p className="text-muted-foreground mb-6 text-center">or click to browse from your computer</p>
+          <p className="text-muted-foreground mb-6 text-center">
+            or click to browse from your computer
+          </p>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
@@ -93,7 +103,9 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
           </div>
         </label>
 
-        {isDragging && <div className="absolute inset-0 rounded-2xl bg-accent/5 pointer-events-none" />}
+        {isDragging && (
+          <div className="absolute inset-0 rounded-2xl bg-accent/5 pointer-events-none" />
+        )}
       </div>
     </div>
   )

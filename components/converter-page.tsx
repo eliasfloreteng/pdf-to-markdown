@@ -11,7 +11,8 @@ import type { ProcessedDocument } from "@/lib/types"
 export function ConverterPage() {
   const [documents, setDocuments] = useState<ProcessedDocument[]>([])
   const [processingFiles, setProcessingFiles] = useState<File[]>([])
-  const [selectedDocument, setSelectedDocument] = useState<ProcessedDocument | null>(null)
+  const [selectedDocument, setSelectedDocument] =
+    useState<ProcessedDocument | null>(null)
   const [history, setHistory] = useState<ProcessedDocument[]>([])
 
   const handleFilesSelected = async (files: File[]) => {
@@ -49,42 +50,65 @@ export function ConverterPage() {
 
   return (
     <div className="min-h-screen flex">
-      <HistorySidebar history={history} onSelect={handleDocumentSelect} selectedId={selectedDocument?.id} />
+      <HistorySidebar
+        history={history}
+        onSelect={handleDocumentSelect}
+        selectedId={selectedDocument?.id}
+      />
 
       <main className="flex-1 flex flex-col">
-        {!selectedDocument && documents.length === 0 && processingFiles.length === 0 && (
-          <>
-            <Hero />
-            <div className="flex-1 flex items-center justify-center px-4 pb-16">
-              <UploadZone onFilesSelected={handleFilesSelected} />
-            </div>
-          </>
+        {!selectedDocument &&
+          documents.length === 0 &&
+          processingFiles.length === 0 && (
+            <>
+              <Hero />
+              <div className="flex-1 flex items-center justify-center px-4 pb-16">
+                <UploadZone onFilesSelected={handleFilesSelected} />
+              </div>
+            </>
+          )}
+
+        {processingFiles.length > 0 && (
+          <ProcessingView files={processingFiles} />
         )}
 
-        {processingFiles.length > 0 && <ProcessingView files={processingFiles} />}
+        {selectedDocument && (
+          <ResultsView
+            document={selectedDocument}
+            onNewUpload={handleNewUpload}
+          />
+        )}
 
-        {selectedDocument && <ResultsView document={selectedDocument} onNewUpload={handleNewUpload} />}
-
-        {documents.length > 1 && !selectedDocument && processingFiles.length === 0 && (
-          <div className="flex-1 flex items-center justify-center p-8">
-            <div className="text-center space-y-4">
-              <h2 className="text-2xl font-semibold text-foreground">{documents.length} documents processed</h2>
-              <p className="text-muted-foreground">Select a document from the list to view results</p>
-              <div className="grid gap-3 mt-6 max-w-2xl">
-                {documents.map((doc) => (
-                  <button
-                    key={doc.id}
-                    onClick={() => handleDocumentSelect(doc)}
-                    className="p-4 border border-border rounded-lg hover:border-primary hover:bg-accent/50 transition-colors text-left"
-                  >
-                    <div className="font-medium text-foreground">{doc.name}</div>
-                    <div className="text-sm text-muted-foreground mt-1">{doc.timestamp.toLocaleString()}</div>
-                  </button>
-                ))}
+        {documents.length > 1 &&
+          !selectedDocument &&
+          processingFiles.length === 0 && (
+            <div className="flex-1 flex items-center justify-center p-8">
+              <div className="text-center space-y-4">
+                <h2 className="text-2xl font-semibold text-foreground">
+                  {documents.length} documents processed
+                </h2>
+                <p className="text-muted-foreground">
+                  Select a document from the list to view results
+                </p>
+                <div className="grid gap-3 mt-6 max-w-2xl">
+                  {documents.map((doc) => (
+                    <button
+                      key={doc.id}
+                      onClick={() => handleDocumentSelect(doc)}
+                      className="p-4 border border-border rounded-lg hover:border-primary hover:bg-accent/50 transition-colors text-left"
+                    >
+                      <div className="font-medium text-foreground">
+                        {doc.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-1">
+                        {doc.timestamp.toLocaleString()}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
       </main>
     </div>
   )

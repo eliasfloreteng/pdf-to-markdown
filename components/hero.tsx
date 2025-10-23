@@ -14,8 +14,9 @@ export function Hero() {
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty leading-relaxed">
-          State-of-the-art OCR with 99% accuracy. Convert PDFs and images to markdown with flawless handling of math,
-          tables, figures, and 100+ languages.
+          State-of-the-art OCR with 99% accuracy. Convert PDFs and images to
+          markdown with flawless handling of math, tables, figures, and 100+
+          languages.
         </p>
 
         <div className="mt-8 flex items-center justify-center gap-6 text-sm text-muted-foreground">
