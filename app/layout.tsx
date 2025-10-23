@@ -7,9 +7,9 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: "PDF to Markdown",
+  description:
+    "Transform Documents into Perfect Markdown. State-of-the-art OCR with 99% accuracy. Convert PDFs and images to markdown with flawless handling of math, tables, figures, and 100+ languages.",
 }
 
 export default function RootLayout({
