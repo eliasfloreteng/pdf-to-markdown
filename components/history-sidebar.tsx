@@ -35,8 +35,8 @@ export function HistorySidebar({
   return (
     <aside
       className={cn(
-        "border-r border-border bg-sidebar transition-all duration-300 flex-shrink-0",
-        isCollapsed ? "w-0" : "w-64",
+        "border-r border-border bg-sidebar transition-all duration-300 flex-shrink-0 sticky top-0 h-screen",
+        isCollapsed ? "w-12" : "w-64",
       )}
     >
       <div className={cn("h-full flex flex-col", isCollapsed && "hidden")}>
