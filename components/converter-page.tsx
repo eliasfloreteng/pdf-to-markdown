@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Hero } from "./hero"
 import { UploadZone } from "./upload-zone"
 import { ProcessingView } from "./processing-view"
@@ -9,6 +9,7 @@ import { HistorySidebar } from "./history-sidebar"
 import type { ProcessedDocument } from "@/lib/types"
 import { convertDocumentToMarkdown } from "@/app/actions/convert-document"
 import { toast } from "sonner"
+import { getAllDocuments, saveDocument, deleteDocument } from "@/lib/storage"
 
 export function ConverterPage() {
   const [documents, setDocuments] = useState<ProcessedDocument[]>([])
@@ -16,6 +17,31 @@ export function ConverterPage() {
   const [selectedDocument, setSelectedDocument] =
     useState<ProcessedDocument | null>(null)
   const [history, setHistory] = useState<ProcessedDocument[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Load persisted documents on mount
+  useEffect(() => {
+    const loadDocuments = async () => {
+      try {
+        const savedDocuments = await getAllDocuments()
+        if (savedDocuments.length > 0) {
+          // Convert timestamp strings back to Date objects
+          const documentsWithDates = savedDocuments.map((doc) => ({
+            ...doc,
+            timestamp: new Date(doc.timestamp),
+          }))
+          setHistory(documentsWithDates)
+        }
+      } catch (error) {
+        console.error("Failed to load documents from storage:", error)
+        toast.error("Failed to load saved documents")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadDocuments()
+  }, [])
 
   const handleFilesSelected = async (files: File[]) => {
     setProcessingFiles(files)
@@ -44,6 +70,16 @@ export function ConverterPage() {
         setDocuments(processed)
         setHistory((prev) => [...processed, ...prev])
 
+        // Save each document to IndexedDB
+        for (const doc of processed) {
+          try {
+            await saveDocument(doc)
+          } catch (error) {
+            console.error("Failed to save document to storage:", error)
+            toast.error(`Failed to save ${doc.name} to storage`)
+          }
+        }
+
         if (processed.length === 1) {
           setSelectedDocument(processed[0])
         }
@@ -70,12 +106,45 @@ export function ConverterPage() {
     setProcessingFiles([])
   }
 
+  const handleDeleteDocument = async (id: string) => {
+    try {
+      await deleteDocument(id)
+      setHistory((prev) => prev.filter((doc) => doc.id !== id))
+
+      // If the deleted document was selected, clear selection
+      if (selectedDocument?.id === id) {
+        setSelectedDocument(null)
+      }
+
+      toast.success("Document deleted")
+    } catch (error) {
+      console.error("Failed to delete document:", error)
+      toast.error("Failed to delete document")
+    }
+  }
+
+  const handleClearAll = async () => {
+    try {
+      const { clearAllDocuments } = await import("@/lib/storage")
+      await clearAllDocuments()
+      setHistory([])
+      setSelectedDocument(null)
+      setDocuments([])
+      toast.success("All documents cleared")
+    } catch (error) {
+      console.error("Failed to clear documents:", error)
+      toast.error("Failed to clear documents")
+    }
+  }
+
   return (
     <div className="min-h-screen flex">
       <HistorySidebar
         history={history}
         onSelect={handleDocumentSelect}
         selectedId={selectedDocument?.id}
+        onDelete={handleDeleteDocument}
+        onClearAll={handleClearAll}
       />
 
       <main className="flex-1 flex flex-col">
