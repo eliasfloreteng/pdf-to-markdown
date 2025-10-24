@@ -20,14 +20,14 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
 
       const files = Array.from(e.dataTransfer.files).filter(
         (file) =>
-          file.type === "application/pdf" || file.type.startsWith("image/")
+          file.type === "application/pdf" || file.type.startsWith("image/"),
       )
 
       if (files.length > 0) {
         onFilesSelected(files)
       }
     },
-    [onFilesSelected]
+    [onFilesSelected],
   )
 
   const handleFileInput = useCallback(
@@ -37,7 +37,7 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
         onFilesSelected(files)
       }
     },
-    [onFilesSelected]
+    [onFilesSelected],
   )
 
   return (
@@ -53,7 +53,7 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
           "relative border-2 border-dashed rounded-2xl p-12 transition-all duration-200",
           isDragging
             ? "border-accent bg-accent/10 scale-[1.02]"
-            : "border-border hover:border-accent/50 hover:bg-accent/5"
+            : "border-border hover:border-accent/50 hover:bg-accent/5",
         )}
       >
         <input
@@ -74,7 +74,7 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
               "w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-colors",
               isDragging
                 ? "bg-accent text-accent-foreground"
-                : "bg-secondary text-secondary-foreground"
+                : "bg-secondary text-secondary-foreground",
             )}
           >
             <Upload className="w-8 h-8" />

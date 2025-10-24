@@ -25,7 +25,7 @@ export function HistorySidebar({
     <aside
       className={cn(
         "border-r border-border bg-sidebar transition-all duration-300 flex-shrink-0",
-        isCollapsed ? "w-0" : "w-64"
+        isCollapsed ? "w-0" : "w-64",
       )}
     >
       <div className={cn("h-full flex flex-col", isCollapsed && "hidden")}>
@@ -54,7 +54,7 @@ export function HistorySidebar({
                 "w-full p-3 rounded-lg text-left transition-colors",
                 selectedId === doc.id
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "hover:bg-sidebar-accent/50 text-sidebar-foreground"
+                  : "hover:bg-sidebar-accent/50 text-sidebar-foreground",
               )}
             >
               <div className="flex items-start gap-2">
