@@ -7,6 +7,8 @@ import { ProcessingView } from "./processing-view"
 import { ResultsView } from "./results-view"
 import { HistorySidebar } from "./history-sidebar"
 import type { ProcessedDocument } from "@/lib/types"
+import { convertDocumentToMarkdown } from "@/app/actions/convert-document"
+import { toast } from "sonner"
 
 export function ConverterPage() {
   const [documents, setDocuments] = useState<ProcessedDocument[]>([])
@@ -18,23 +20,43 @@ export function ConverterPage() {
   const handleFilesSelected = async (files: File[]) => {
     setProcessingFiles(files)
 
-    // Mock processing with delay
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+    try {
+      const processed: ProcessedDocument[] = []
 
-    const processed: ProcessedDocument[] = files.map((file, index) => ({
-      id: `${Date.now()}-${index}`,
-      name: file.name,
-      timestamp: new Date(),
-      markdown: generateMockMarkdown(file.name),
-      images: generateMockImages(),
-    }))
+      // Process each file
+      for (const file of files) {
+        try {
+          const formData = new FormData()
+          formData.append("file", file)
 
-    setDocuments(processed)
-    setHistory((prev) => [...processed, ...prev])
-    setProcessingFiles([])
+          const result = await convertDocumentToMarkdown(formData)
+          processed.push(result)
+        } catch (error) {
+          console.error(`Error processing ${file.name}:`, error)
+          toast.error(`Failed to process ${file.name}`, {
+            description:
+              error instanceof Error ? error.message : "Unknown error",
+          })
+        }
+      }
 
-    if (processed.length === 1) {
-      setSelectedDocument(processed[0])
+      if (processed.length > 0) {
+        setDocuments(processed)
+        setHistory((prev) => [...processed, ...prev])
+
+        if (processed.length === 1) {
+          setSelectedDocument(processed[0])
+        }
+
+        toast.success(
+          `Successfully processed ${processed.length} document${processed.length > 1 ? "s" : ""}`,
+        )
+      }
+    } catch (error) {
+      console.error("Error processing files:", error)
+      toast.error("Failed to process documents")
+    } finally {
+      setProcessingFiles([])
     }
   }
 
@@ -112,76 +134,4 @@ export function ConverterPage() {
       </main>
     </div>
   )
-}
-
-function generateMockMarkdown(filename: string): string {
-  return `# ${filename.replace(/\.[^/.]+$/, "")}
-
-## Introduction
-
-This document demonstrates the **state-of-the-art OCR capabilities** powered by Mistral AI. The system achieves 99% accuracy across multiple languages and handles complex elements seamlessly.
-
-### Mathematical Equations
-
-The quadratic formula is given by:
-
-$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$
-
-For inline math, we can write $$E = mc^2$$ directly in the text.
-
-## Tables
-
-| Feature | Accuracy | Languages |
-|---------|----------|-----------|
-| Text Recognition | 99% | 100+ |
-| Math Equations | 98% | Universal |
-| Table Extraction | 97% | N/A |
-
-## Code Blocks
-
-\`\`\`python
-def process_document(file_path):
-    """Process a document using Mistral AI OCR"""
-    result = mistral_ocr.convert(file_path)
-    return result.markdown
-\`\`\`
-
-## Images
-
-![Sample Figure](/placeholder.svg?height=300&width=500&query=scientific+diagram)
-
-The figure above demonstrates the extraction quality for complex diagrams.
-
-## Lists
-
-1. **High Accuracy**: 99% recognition rate
-2. **Multi-language**: Support for 100+ languages
-3. **Complex Elements**: Tables, equations, figures
-4. **Fast Processing**: Results in seconds
-
-### Bullet Points
-
-- Seamless PDF processing
-- Image format support
-- Batch conversion
-- Export options (Markdown, ZIP)
-
-## Conclusion
-
-This technology represents a significant advancement in document digitization, making it perfect for LLM ingestion and knowledge management systems.`
-}
-
-function generateMockImages() {
-  return [
-    {
-      id: "1",
-      url: "/scientific-diagram.jpg",
-      alt: "Scientific diagram extracted from document",
-    },
-    {
-      id: "2",
-      url: "/data-visualization-chart.png",
-      alt: "Data visualization chart",
-    },
-  ]
 }
