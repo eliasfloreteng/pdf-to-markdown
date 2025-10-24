@@ -80,20 +80,13 @@ export async function convertDocumentToMarkdown(
     })
 
     // Combine all page markdown content and replace image references
-    const combinedMarkdown = pages
-      .map((page) => {
-        let markdown = page.markdown
+    const combinedMarkdown = pages.map((page) => page.markdown).join("\n")
 
-        // Replace image references with actual base64 data URLs
-        imageMap.forEach((dataUrl, imageId) => {
-          // Replace markdown image syntax: ![alt](imageId) with ![alt](dataUrl)
-          const imageRegex = new RegExp(`!\\[([^\\]]*)\\]\\(${imageId}\\)`, "g")
-          markdown = markdown.replace(imageRegex, `![$1](${dataUrl})`)
-        })
-
-        return markdown
-      })
-      .join("\n\n")
+    // Convert imageMap to plain object for serialization
+    const imageMapObject: Record<string, string> = {}
+    imageMap.forEach((url, id) => {
+      imageMapObject[id] = url
+    })
 
     // Create processed document
     const processedDocument: ProcessedDocument = {
@@ -102,6 +95,7 @@ export async function convertDocumentToMarkdown(
       timestamp: new Date(),
       markdown: combinedMarkdown,
       images: extractedImages,
+      imageMap: imageMapObject,
     }
 
     return processedDocument

@@ -8,9 +8,13 @@ import "katex/dist/katex.min.css"
 
 interface MarkdownRendererProps {
   content: string
+  imageMap?: Record<string, string>
 }
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+export function MarkdownRenderer({
+  content,
+  imageMap = {},
+}: MarkdownRendererProps) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
@@ -88,13 +92,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             {children}
           </blockquote>
         ),
-        img: ({ src, alt }) => (
-          <img
-            src={src || "/placeholder.svg"}
-            alt={alt || ""}
-            className="rounded-lg my-6 max-w-full h-auto"
-          />
-        ),
+        img: ({ src, alt }) => {
+          // If src matches an image ID in the imageMap, use the base64 data URL
+          const srcString = typeof src === "string" ? src : ""
+          const imageSrc =
+            srcString && imageMap[srcString] ? imageMap[srcString] : srcString
+          return (
+            <img
+              src={imageSrc || "/placeholder.svg"}
+              alt={alt || ""}
+              className="rounded-lg my-6 max-w-full h-auto"
+            />
+          )
+        },
       }}
     >
       {content}

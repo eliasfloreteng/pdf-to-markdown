@@ -100,7 +100,10 @@ export function ResultsView({ document, onNewUpload }: ResultsViewProps) {
       <div className="flex-1 overflow-auto">
         <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
           <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <MarkdownRenderer content={document.markdown} />
+            <MarkdownRenderer
+              content={document.markdown}
+              imageMap={document.imageMap}
+            />
           </div>
 
           {document.images.length > 0 && (

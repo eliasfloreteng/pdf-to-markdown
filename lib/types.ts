@@ -4,6 +4,7 @@ export interface ProcessedDocument {
   timestamp: Date
   markdown: string
   images: ImageItem[]
+  imageMap?: Record<string, string>
 }
 
 export interface ImageItem {
