@@ -58,31 +58,42 @@ export async function convertDocumentToMarkdown(
     // Process the response
     const pages = ocrResponse.pages || []
 
-    // Combine all page markdown content
-    const combinedMarkdown = pages
-      .map((page) => {
-        // Add page separator for multi-page documents
-        const pageHeader =
-          pages.length > 1 ? `\n\n---\n\n# Page ${page.index}\n\n` : ""
-        return pageHeader + page.markdown
-      })
-      .join("\n\n")
-
-    // Extract all images from all pages
+    // Create a map of image IDs to their base64 data URLs
+    const imageMap = new Map<string, string>()
     const extractedImages: ImageItem[] = []
+
     pages.forEach((page) => {
       if (page.images && page.images.length > 0) {
         page.images.forEach((img) => {
           if (img.imageBase64) {
+            // The imageBase64 already includes the data URL prefix
+            const imageUrl = img.imageBase64
+            imageMap.set(img.id, imageUrl)
             extractedImages.push({
               id: img.id,
-              url: `data:image/jpeg;base64,${img.imageBase64}`,
+              url: imageUrl,
               alt: `Extracted image ${img.id} from page ${page.index}`,
             })
           }
         })
       }
     })
+
+    // Combine all page markdown content and replace image references
+    const combinedMarkdown = pages
+      .map((page) => {
+        let markdown = page.markdown
+
+        // Replace image references with actual base64 data URLs
+        imageMap.forEach((dataUrl, imageId) => {
+          // Replace markdown image syntax: ![alt](imageId) with ![alt](dataUrl)
+          const imageRegex = new RegExp(`!\\[([^\\]]*)\\]\\(${imageId}\\)`, "g")
+          markdown = markdown.replace(imageRegex, `![$1](${dataUrl})`)
+        })
+
+        return markdown
+      })
+      .join("\n\n")
 
     // Create processed document
     const processedDocument: ProcessedDocument = {
