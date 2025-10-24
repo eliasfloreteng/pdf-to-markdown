@@ -31,12 +31,12 @@ export const metadata: Metadata = {
   ],
   creator: "Elias Floreteng",
   publisher: "Elias Floreteng",
-  metadataBase: new URL("https://pdf-to-markdown.vercel.app"),
+  metadataBase: new URL("https://pdf2mdown.vercel.app"),
   openGraph: {
     title: "PDF to Markdown | Mistral OCR",
     description:
       "State-of-the-art OCR with 99% accuracy. Convert PDFs and images to markdown with flawless handling of math, tables, figures, and 100+ languages.",
-    url: "https://pdf-to-markdown.vercel.app",
+    url: "https://pdf2mdown.vercel.app",
     siteName: "PDF to Markdown",
     locale: "en_US",
     type: "website",
