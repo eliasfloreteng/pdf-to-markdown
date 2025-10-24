@@ -5,6 +5,8 @@ export interface ProcessedDocument {
   markdown: string
   images: ImageItem[]
   imageMap?: Record<string, string>
+  pageCount?: number
+  fileSize?: number
 }
 
 export interface ImageItem {

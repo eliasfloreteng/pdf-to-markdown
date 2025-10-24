@@ -20,6 +20,9 @@ export async function convertDocumentToMarkdown(
       throw new Error("No file provided")
     }
 
+    // Capture file size
+    const fileSize = file.size
+
     // Read file as buffer
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
@@ -96,6 +99,8 @@ export async function convertDocumentToMarkdown(
       markdown: combinedMarkdown,
       images: extractedImages,
       imageMap: imageMapObject,
+      pageCount: pages.length,
+      fileSize,
     }
 
     return processedDocument

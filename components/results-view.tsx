@@ -13,6 +13,14 @@ interface ResultsViewProps {
   document: ProcessedDocument
 }
 
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) return "0 Bytes"
+  const k = 1024
+  const sizes = ["Bytes", "KB", "MB", "GB"]
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i]
+}
+
 export function ResultsView({ document }: ResultsViewProps) {
   const [copied, setCopied] = useState(false)
 
@@ -76,9 +84,24 @@ export function ResultsView({ document }: ResultsViewProps) {
             <h2 className="text-lg font-semibold text-foreground truncate">
               {document.name}
             </h2>
-            <p className="text-sm text-muted-foreground">
-              Processed {document.timestamp.toLocaleString()}
-            </p>
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+              <span>Processed {document.timestamp.toLocaleString()}</span>
+              {document.pageCount && (
+                <>
+                  <span>•</span>
+                  <span>
+                    {document.pageCount}{" "}
+                    {document.pageCount === 1 ? "page" : "pages"}
+                  </span>
+                </>
+              )}
+              {document.fileSize && (
+                <>
+                  <span>•</span>
+                  <span>{formatFileSize(document.fileSize)}</span>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
