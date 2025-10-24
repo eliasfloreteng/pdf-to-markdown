@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Copy, Download, FileArchive, Upload, Check } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { ImageGallery } from "./image-gallery"
@@ -98,22 +99,34 @@ export function ResultsView({ document, onNewUpload }: ResultsViewProps) {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <MarkdownRenderer
-              content={document.markdown}
-              imageMap={document.imageMap}
-            />
-          </div>
+        <div className="max-w-5xl mx-auto px-4 py-8">
+          <Tabs defaultValue="document" className="w-full">
+            <TabsList className="grid w-full max-w-md grid-cols-2">
+              <TabsTrigger value="document">Document</TabsTrigger>
+              <TabsTrigger value="images">
+                Images ({document.images.length})
+              </TabsTrigger>
+            </TabsList>
 
-          {document.images.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">
-                Extracted Images ({document.images.length})
-              </h3>
-              <ImageGallery images={document.images} />
-            </div>
-          )}
+            <TabsContent value="document" className="mt-6">
+              <div className="prose prose-neutral dark:prose-invert max-w-none">
+                <MarkdownRenderer
+                  content={document.markdown}
+                  imageMap={document.imageMap}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="images" className="mt-6">
+              {document.images.length > 0 ? (
+                <ImageGallery images={document.images} />
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">
+                  No images extracted from this document
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
