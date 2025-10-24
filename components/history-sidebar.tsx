@@ -8,6 +8,7 @@ import {
   Clock,
   Trash2,
   X,
+  Upload,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -19,6 +20,7 @@ interface HistorySidebarProps {
   selectedId?: string
   onDelete?: (id: string) => void
   onClearAll?: () => void
+  onNewUpload?: () => void
 }
 
 export function HistorySidebar({
@@ -27,6 +29,7 @@ export function HistorySidebar({
   selectedId,
   onDelete,
   onClearAll,
+  onNewUpload,
 }: HistorySidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
@@ -57,15 +60,10 @@ export function HistorySidebar({
             </Button>
           </div>
 
-          {onClearAll && history.length > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onClearAll}
-              className="w-full text-xs gap-2"
-            >
-              <Trash2 className="w-3 h-3" />
-              Clear All
+          {onNewUpload && (
+            <Button onClick={onNewUpload} className="w-full gap-2" size="sm">
+              <Upload className="w-4 h-4" />
+              New Upload
             </Button>
           )}
         </div>
@@ -113,6 +111,20 @@ export function HistorySidebar({
               )}
             </div>
           ))}
+        </div>
+
+        <div className="p-2 border-t border-sidebar-border">
+          {onClearAll && history.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onClearAll}
+              className="w-full text-xs gap-2"
+            >
+              <Trash2 className="w-3 h-3" />
+              Clear All
+            </Button>
+          )}
         </div>
       </div>
 

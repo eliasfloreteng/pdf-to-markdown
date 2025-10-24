@@ -11,10 +11,9 @@ import JSZip from "jszip"
 
 interface ResultsViewProps {
   document: ProcessedDocument
-  onNewUpload: () => void
 }
 
-export function ResultsView({ document, onNewUpload }: ResultsViewProps) {
+export function ResultsView({ document }: ResultsViewProps) {
   const [copied, setCopied] = useState(false)
 
   const handleCopyMarkdown = async () => {
@@ -83,12 +82,7 @@ export function ResultsView({ document, onNewUpload }: ResultsViewProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCopyMarkdown}
-              className="gap-2 bg-transparent"
-            >
+            <Button size="sm" onClick={handleCopyMarkdown} className="gap-2">
               {copied ? (
                 <>
                   <Check className="w-4 h-4" />
@@ -109,7 +103,7 @@ export function ResultsView({ document, onNewUpload }: ResultsViewProps) {
               className="gap-2 bg-transparent"
             >
               <Download className="w-4 h-4" />
-              Markdown
+              Download
             </Button>
 
             <Button
@@ -120,11 +114,6 @@ export function ResultsView({ document, onNewUpload }: ResultsViewProps) {
             >
               <FileArchive className="w-4 h-4" />
               ZIP
-            </Button>
-
-            <Button size="sm" onClick={onNewUpload} className="gap-2">
-              <Upload className="w-4 h-4" />
-              New
             </Button>
           </div>
         </div>

@@ -145,6 +145,7 @@ export function ConverterPage() {
         selectedId={selectedDocument?.id}
         onDelete={handleDeleteDocument}
         onClearAll={handleClearAll}
+        onNewUpload={handleNewUpload}
       />
 
       <main className="flex-1 flex flex-col">
@@ -163,12 +164,7 @@ export function ConverterPage() {
           <ProcessingView files={processingFiles} />
         )}
 
-        {selectedDocument && (
-          <ResultsView
-            document={selectedDocument}
-            onNewUpload={handleNewUpload}
-          />
-        )}
+        {selectedDocument && <ResultsView document={selectedDocument} />}
 
         {documents.length > 1 &&
           !selectedDocument &&
