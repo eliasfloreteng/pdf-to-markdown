@@ -7,6 +7,7 @@ import { Copy, Download, FileArchive, Upload, Check } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { ImageGallery } from "./image-gallery"
 import type { ProcessedDocument } from "@/lib/types"
+import JSZip from "jszip"
 
 interface ResultsViewProps {
   document: ProcessedDocument
@@ -32,9 +33,40 @@ export function ResultsView({ document, onNewUpload }: ResultsViewProps) {
     URL.revokeObjectURL(url)
   }
 
-  const handleDownloadZip = () => {
-    // Mock ZIP download
-    alert("ZIP download would include markdown file and all extracted images")
+  const handleDownloadZip = async () => {
+    try {
+      const zip = new JSZip()
+
+      // Add markdown file
+      const baseFilename = document.name.replace(/\.[^/.]+$/, "")
+      zip.file(`${baseFilename}.md`, document.markdown)
+
+      // Add images at the same level as markdown (so references resolve)
+      if (document.images.length > 0) {
+        for (const image of document.images) {
+          // Convert base64 data URL to blob
+          const response = await fetch(image.url)
+          const blob = await response.blob()
+
+          // Use image ID as-is (already includes extension like "img-0.jpeg")
+          zip.file(image.id, blob)
+        }
+      }
+
+      // Generate ZIP file
+      const zipBlob = await zip.generateAsync({ type: "blob" })
+
+      // Download ZIP
+      const url = URL.createObjectURL(zipBlob)
+      const a = window.document.createElement("a")
+      a.href = url
+      a.download = `${baseFilename}.zip`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error("Failed to create ZIP:", error)
+      alert("Failed to create ZIP file. Please try again.")
+    }
   }
 
   return (
