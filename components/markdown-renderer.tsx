@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import remarkBreaks from "remark-breaks"
 import rehypeKatex from "rehype-katex"
+import { ImageWithActions } from "./image-with-actions"
 import "katex/dist/katex.min.css"
 
 interface MarkdownRendererProps {
@@ -97,11 +98,13 @@ export function MarkdownRenderer({
           const srcString = typeof src === "string" ? src : ""
           const imageSrc =
             srcString && imageMap[srcString] ? imageMap[srcString] : srcString
+          const altString = typeof alt === "string" ? alt : ""
+
           return (
-            <img
+            <ImageWithActions
               src={imageSrc || "/placeholder.svg"}
-              alt={alt || ""}
-              className="rounded-lg my-6 max-w-full h-auto"
+              alt={altString}
+              className="rounded-lg max-w-full h-auto my-6"
             />
           )
         },
