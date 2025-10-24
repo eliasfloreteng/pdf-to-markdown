@@ -1,6 +1,9 @@
 "use client"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import remarkMath from "remark-math"
+import rehypeKatex from "rehype-katex"
+import "katex/dist/katex.min.css"
 
 interface MarkdownRendererProps {
   content: string
@@ -9,7 +12,8 @@ interface MarkdownRendererProps {
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
       components={{
         h1: ({ children }) => (
           <h1 className="text-3xl font-bold text-foreground mt-8 mb-4 text-balance">
