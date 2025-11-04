@@ -184,16 +184,23 @@ export function MarkdownRenderer({
           </blockquote>
         ),
         img: ({ src, alt }) => {
-          // If images are disabled, don't render them
-          if (!showImages) {
-            return null
-          }
-
           // If src matches an image ID in the imageMap, use the base64 data URL
           const srcString = typeof src === "string" ? src : ""
           const imageSrc =
             srcString && imageMap[srcString] ? imageMap[srcString] : srcString
           const altString = typeof alt === "string" ? alt : ""
+
+          // If images are disabled, show a small placeholder
+          if (!showImages) {
+            return (
+              <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-muted text-muted-foreground text-xs font-mono border border-border">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {srcString || altString || "image"}
+              </span>
+            )
+          }
 
           return (
               <ImageWithActions
