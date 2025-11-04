@@ -3,9 +3,12 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import { Copy, Download, FileArchive, Upload, Check } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { ImageGallery } from "./image-gallery"
+import { useCopyMarkdown } from "@/lib/copy-markdown-context"
 import type { ProcessedDocument } from "@/lib/types"
 import JSZip from "jszip"
 
@@ -23,6 +26,7 @@ function formatFileSize(bytes: number): string {
 
 export function ResultsView({ document }: ResultsViewProps) {
   const [copied, setCopied] = useState(false)
+  const { enabled, setEnabled } = useCopyMarkdown()
 
   const handleCopyMarkdown = async () => {
     await navigator.clipboard.writeText(document.markdown)
@@ -153,6 +157,16 @@ export function ResultsView({ document }: ResultsViewProps) {
             </TabsList>
 
             <TabsContent value="document" className="mt-6">
+              <div className="flex items-center justify-end gap-2 mb-4">
+                <Label htmlFor="copy-markdown-toggle" className="text-sm text-muted-foreground cursor-pointer">
+                  Copy as Markdown
+                </Label>
+                <Switch
+                  id="copy-markdown-toggle"
+                  checked={enabled}
+                  onCheckedChange={setEnabled}
+                />
+              </div>
               <div className="prose prose-neutral dark:prose-invert max-w-none">
                 <MarkdownRenderer
                   content={document.markdown}

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
+import { CopyMarkdownProvider } from "@/lib/copy-markdown-context"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -69,9 +70,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans antialiased`}>
-        {children}
-        <Analytics />
-        <Toaster />
+        <CopyMarkdownProvider>
+          {children}
+          <Analytics />
+          <Toaster />
+        </CopyMarkdownProvider>
       </body>
     </html>
   )
