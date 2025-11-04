@@ -38,53 +38,53 @@ export function ProcessingView({ files }: ProcessingViewProps) {
   }, [])
 
   return (
-    <div className="flex-1 flex items-center justify-center p-8">
-      <div className="w-full max-w-2xl space-y-8">
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-accent/20 mb-4">
-            <Loader2 className="w-10 h-10 text-accent animate-spin" />
+    <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
+      <div className="w-full max-w-2xl space-y-6 sm:space-y-8">
+        <div className="text-center space-y-3 sm:space-y-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent/20 mb-2 sm:mb-4">
+            <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 text-accent animate-spin" />
           </div>
 
-          <h2 className="text-2xl font-semibold text-foreground">
+          <h2 className="text-xl sm:text-2xl font-semibold text-foreground px-4">
             Processing {files.length}{" "}
             {files.length === 1 ? "document" : "documents"}
           </h2>
 
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground px-4">
             Using Mistral AI to extract content with 99% accuracy
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4 px-2">
           <Progress value={progress} className="h-2" />
 
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Sparkles className="w-4 h-4 text-accent animate-pulse" />
-            <span className="animate-pulse">{steps[currentStep]}</span>
+          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent animate-pulse" />
+            <span className="animate-pulse text-center">{steps[currentStep]}</span>
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {files.map((file, index) => (
             <div
               key={index}
-              className="flex items-center gap-3 p-4 rounded-lg bg-card border border-border"
+              className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-card border border-border"
             >
-              <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
-                <FileText className="w-5 h-5 text-secondary-foreground" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-secondary-foreground" />
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-foreground truncate">
+                <div className="font-medium text-sm sm:text-base text-foreground truncate">
                   {file.name}
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs sm:text-sm text-muted-foreground">
                   {(file.size / 1024 / 1024).toFixed(2)} MB
                 </div>
               </div>
 
               <div className="flex-shrink-0">
-                <Loader2 className="w-5 h-5 text-accent animate-spin" />
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-accent animate-spin" />
               </div>
             </div>
           ))}

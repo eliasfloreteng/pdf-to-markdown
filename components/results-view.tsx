@@ -85,17 +85,17 @@ export function ResultsView({ document }: ResultsViewProps) {
   return (
     <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "document" | "images")} className="flex-1 flex flex-col">
       <div className="border-b border-border bg-card sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 space-y-4">
-          <div className="flex items-center justify-between gap-4">
+        <div className="max-w-5xl mx-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div className="flex-1 min-w-0">
-              <h2 className="text-lg font-semibold text-foreground truncate">
+              <h2 className="text-base sm:text-lg font-semibold text-foreground truncate">
                 {document.name}
               </h2>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <span>Processed {document.timestamp.toLocaleString()}</span>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
+                <span className="truncate">Processed {document.timestamp.toLocaleString()}</span>
                 {document.pageCount && (
                   <>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span>
                       {document.pageCount}{" "}
                       {document.pageCount === 1 ? "page" : "pages"}
@@ -104,7 +104,7 @@ export function ResultsView({ document }: ResultsViewProps) {
                 )}
                 {document.fileSize && (
                   <>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span>{formatFileSize(document.fileSize)}</span>
                   </>
                 )}
@@ -112,16 +112,16 @@ export function ResultsView({ document }: ResultsViewProps) {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button size="sm" onClick={handleCopyMarkdown} className="gap-2">
+              <Button size="sm" onClick={handleCopyMarkdown} className="gap-1.5 text-xs sm:text-sm flex-1 sm:flex-none">
                 {copied ? (
                   <>
-                    <Check className="w-4 h-4" />
-                    Copied
+                    <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span className="hidden xs:inline">Copied</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4" />
-                    Copy
+                    <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span className="hidden xs:inline">Copy</span>
                   </>
                 )}
               </Button>
@@ -130,37 +130,37 @@ export function ResultsView({ document }: ResultsViewProps) {
                 variant="outline"
                 size="sm"
                 onClick={handleDownloadMarkdown}
-                className="gap-2 bg-transparent"
+                className="gap-1.5 bg-transparent text-xs sm:text-sm flex-1 sm:flex-none"
               >
-                <Download className="w-4 h-4" />
-                Download
+                <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Download</span>
               </Button>
 
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleDownloadZip}
-                className="gap-2 bg-transparent"
+                className="gap-1.5 bg-transparent text-xs sm:text-sm flex-1 sm:flex-none"
               >
-                <FileArchive className="w-4 h-4" />
-                ZIP
+                <FileArchive className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">ZIP</span>
               </Button>
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-4">
-            <TabsList className="grid max-w-md grid-cols-2">
-              <TabsTrigger value="document">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <TabsList className="grid w-full sm:w-auto sm:max-w-md grid-cols-2">
+              <TabsTrigger value="document" className="text-xs sm:text-sm">
                 Document
               </TabsTrigger>
-              <TabsTrigger value="images">
+              <TabsTrigger value="images" className="text-xs sm:text-sm">
                 Images ({document.images.length})
               </TabsTrigger>
             </TabsList>
 
             {activeTab === "document" && (
-              <div className="flex items-center gap-2">
-                <Label htmlFor="copy-markdown-toggle" className="text-sm text-muted-foreground cursor-pointer">
+              <div className="flex items-center justify-end gap-2">
+                <Label htmlFor="copy-markdown-toggle" className="text-xs sm:text-sm text-muted-foreground cursor-pointer">
                   Copy as Markdown
                 </Label>
                 <Switch
@@ -175,9 +175,9 @@ export function ResultsView({ document }: ResultsViewProps) {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
           <TabsContent value="document" className="mt-0">
-            <div className="prose prose-neutral dark:prose-invert max-w-none">
+            <div className="prose prose-sm sm:prose prose-neutral dark:prose-invert max-w-none">
               <MarkdownRenderer
                 content={document.markdown}
                 imageMap={document.imageMap}
@@ -189,7 +189,7 @@ export function ResultsView({ document }: ResultsViewProps) {
             {document.images.length > 0 ? (
               <ImageGallery images={document.images} />
             ) : (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-sm sm:text-base text-muted-foreground">
                 No images extracted from this document
               </div>
             )}

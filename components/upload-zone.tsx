@@ -41,7 +41,7 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
   )
 
   return (
-    <div className="w-full max-w-2xl">
+    <div className="w-full max-w-2xl px-4">
       <div
         onDragOver={(e) => {
           e.preventDefault()
@@ -50,7 +50,7 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         className={cn(
-          "relative border-2 border-dashed rounded-2xl p-12 transition-all duration-200",
+          "relative border-2 border-dashed rounded-2xl p-6 sm:p-8 md:p-12 transition-all duration-200",
           isDragging
             ? "border-accent bg-accent/10 scale-[1.02]"
             : "border-border hover:border-accent/50 hover:bg-accent/5",
@@ -71,35 +71,35 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
         >
           <div
             className={cn(
-              "w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-colors",
+              "w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mb-3 sm:mb-4 transition-colors",
               isDragging
                 ? "bg-accent text-accent-foreground"
                 : "bg-secondary text-secondary-foreground",
             )}
           >
-            <Upload className="w-8 h-8" />
+            <Upload className="w-6 h-6 sm:w-8 sm:h-8" />
           </div>
 
-          <h3 className="text-xl font-semibold text-foreground mb-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2 text-center">
             Drop your files here
           </h3>
 
-          <p className="text-muted-foreground mb-6 text-center">
+          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 text-center">
             or click to browse from your computer
           </p>
 
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>PDF</span>
             </div>
             <div className="w-1 h-1 rounded-full bg-border" />
-            <div className="flex items-center gap-2">
-              <ImageIcon className="w-4 h-4" />
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Images</span>
             </div>
-            <div className="w-1 h-1 rounded-full bg-border" />
-            <span>Multiple files supported</span>
+            <div className="w-1 h-1 rounded-full bg-border hidden sm:block" />
+            <span className="hidden sm:inline">Multiple files supported</span>
           </div>
         </label>
 

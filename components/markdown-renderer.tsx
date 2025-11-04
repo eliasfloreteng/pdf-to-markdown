@@ -102,9 +102,9 @@ export function MarkdownRenderer({
   }, [enabled])
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="min-w-0">
       {blocks.map((block, index) => (
-        <div key={index} data-markdown={block.source}>
+        <div key={index} data-markdown={block.source} className="min-w-0">
           <ReactMarkdown
             remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
             rehypePlugins={[rehypeKatex]}
@@ -189,11 +189,13 @@ export function MarkdownRenderer({
           const altString = typeof alt === "string" ? alt : ""
 
           return (
-            <ImageWithActions
-              src={imageSrc || "/placeholder.svg"}
-              alt={altString}
-              className="rounded-lg max-w-full h-auto my-6"
-            />
+            <div className="w-full max-w-full my-6">
+              <ImageWithActions
+                src={imageSrc || "/placeholder.svg"}
+                alt={altString}
+                className="rounded-lg max-w-full w-full h-auto"
+              />
+            </div>
           )
         },
           }}

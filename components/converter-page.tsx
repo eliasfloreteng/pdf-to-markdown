@@ -48,9 +48,7 @@ function FileCard({ document, onSelect }: FileCardProps) {
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <div className="font-medium text-foreground">
-            {document.name}
-          </div>
+          <div className="font-medium text-foreground">{document.name}</div>
           <div className="text-sm text-muted-foreground mt-1">
             {document.timestamp.toLocaleString()}
           </div>
@@ -226,7 +224,7 @@ export function ConverterPage() {
         onNewUpload={handleNewUpload}
       />
 
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col min-w-0">
         {!selectedDocument &&
           documents.length === 0 &&
           processingFiles.length === 0 && (
@@ -247,15 +245,15 @@ export function ConverterPage() {
         {documents.length > 1 &&
           !selectedDocument &&
           processingFiles.length === 0 && (
-            <div className="flex-1 flex items-center justify-center p-8">
-              <div className="text-center space-y-4">
-                <h2 className="text-2xl font-semibold text-foreground">
+            <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
+              <div className="text-center space-y-4 w-full max-w-2xl">
+                <h2 className="text-xl sm:text-2xl font-semibold text-foreground">
                   {documents.length} documents processed
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground">
                   Select a document from the list to view results
                 </p>
-                <div className="grid gap-3 mt-6 max-w-2xl">
+                <div className="grid gap-3 mt-6">
                   {documents.map((doc) => (
                     <FileCard
                       key={doc.id}

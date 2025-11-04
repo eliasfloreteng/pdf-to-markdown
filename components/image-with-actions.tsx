@@ -74,7 +74,7 @@ export function ImageWithActions({
   }
 
   return (
-    <span className="group relative inline-block rounded-lg overflow-hidden">
+    <span className="group relative block max-w-full rounded-lg overflow-hidden">
       <img src={src} alt={alt} className={className} />
       <span className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
         <Button
