@@ -44,31 +44,31 @@ function FileCard({ document, onSelect }: FileCardProps) {
   return (
     <div
       onClick={onSelect}
-      className="p-4 border border-border rounded-lg hover:border-primary hover:bg-accent/50 transition-colors text-left cursor-pointer group"
+      className="p-3 sm:p-4 border border-border rounded-lg hover:border-primary hover:bg-accent/50 transition-colors text-left cursor-pointer group"
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
         <div className="flex-1 min-w-0">
-          <div className="font-medium text-foreground">{document.name}</div>
-          <div className="text-sm text-muted-foreground mt-1">
+          <div className="font-medium text-sm sm:text-base text-foreground truncate">{document.name}</div>
+          <div className="text-xs sm:text-sm text-muted-foreground mt-1">
             {document.timestamp.toLocaleString()}
           </div>
         </div>
-        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0">
           <Button
             size="sm"
             variant="outline"
             onClick={handleCopyMarkdown}
-            className="gap-2"
+            className="gap-1.5 flex-1 sm:flex-none"
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4" />
-                Copied
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Copied</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4" />
-                Copy
+                <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Copy</span>
               </>
             )}
           </Button>
@@ -76,10 +76,10 @@ function FileCard({ document, onSelect }: FileCardProps) {
             size="sm"
             variant="outline"
             onClick={handleDownloadMarkdown}
-            className="gap-2"
+            className="gap-1.5 flex-1 sm:flex-none"
           >
-            <Download className="w-4 h-4" />
-            Download
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span>Download</span>
           </Button>
         </div>
       </div>
