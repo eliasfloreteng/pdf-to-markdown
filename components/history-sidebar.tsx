@@ -11,7 +11,8 @@ import {
   Upload,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
+import { VisuallyHidden } from "@/components/ui/visually-hidden"
 import { cn } from "@/lib/utils"
 import type { ProcessedDocument } from "@/lib/types"
 
@@ -143,6 +144,12 @@ export function HistorySidebar({
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-64 bg-sidebar">
+          <VisuallyHidden>
+            <SheetTitle>Document History</SheetTitle>
+            <SheetDescription>
+              View and manage your previously processed documents
+            </SheetDescription>
+          </VisuallyHidden>
           <SidebarContent />
         </SheetContent>
       </Sheet>
