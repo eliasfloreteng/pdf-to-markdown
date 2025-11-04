@@ -15,7 +15,7 @@ interface ImageGalleryProps {
 
 export function ImageGallery({ images }: ImageGalleryProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4">
       {images.map((image) => (
         <div
           key={image.id}
@@ -29,8 +29,8 @@ export function ImageGallery({ images }: ImageGalleryProps) {
             />
           </div>
 
-          <div className="p-3">
-            <p className="text-sm text-muted-foreground truncate">
+          <div className="p-2 sm:p-3">
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
               {image.alt}
             </p>
           </div>
