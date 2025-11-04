@@ -9,7 +9,6 @@ import {
   Trash2,
   X,
   Upload,
-  Menu,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -134,9 +133,13 @@ export function HistorySidebar({
           <Button
             variant="ghost"
             size="icon"
-            className="fixed top-4 left-4 z-50 lg:hidden bg-card/80 backdrop-blur-sm border border-border"
+            className="fixed bottom-4 left-4 z-50 lg:hidden bg-card/80 backdrop-blur-sm border border-border shadow-lg hover:shadow-xl transition-shadow"
+            style={{
+              bottom: 'max(1rem, env(safe-area-inset-bottom))',
+              left: 'max(1rem, env(safe-area-inset-left))'
+            }}
           >
-            <Menu className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5" />
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-64 bg-sidebar">
