@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
 import { CopyMarkdownProvider } from "@/lib/copy-markdown-context"
+import { ShowImagesProvider } from "@/lib/show-images-context"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -77,9 +78,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans antialiased`}>
         <CopyMarkdownProvider>
-          {children}
-          <Analytics />
-          <Toaster />
+          <ShowImagesProvider>
+            {children}
+            <Analytics />
+            <Toaster />
+          </ShowImagesProvider>
         </CopyMarkdownProvider>
       </body>
     </html>

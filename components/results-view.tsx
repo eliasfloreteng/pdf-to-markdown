@@ -9,6 +9,7 @@ import { Copy, Download, FileArchive, Upload, Check } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { ImageGallery } from "./image-gallery"
 import { useCopyMarkdown } from "@/lib/copy-markdown-context"
+import { useShowImages } from "@/lib/show-images-context"
 import type { ProcessedDocument } from "@/lib/types"
 import JSZip from "jszip"
 
@@ -27,6 +28,7 @@ function formatFileSize(bytes: number): string {
 export function ResultsView({ document }: ResultsViewProps) {
   const [copied, setCopied] = useState(false)
   const { enabled, setEnabled } = useCopyMarkdown()
+  const { enabled: showImages, setEnabled: setShowImages } = useShowImages()
 
   const handleCopyMarkdown = async () => {
     await navigator.clipboard.writeText(document.markdown)
@@ -159,15 +161,27 @@ export function ResultsView({ document }: ResultsViewProps) {
             </TabsList>
 
             {activeTab === "document" && (
-              <div className="flex items-center justify-end gap-2">
-                <Label htmlFor="copy-markdown-toggle" className="text-xs sm:text-sm text-muted-foreground cursor-pointer">
-                  Copy as Markdown
-                </Label>
-                <Switch
-                  id="copy-markdown-toggle"
-                  checked={enabled}
-                  onCheckedChange={setEnabled}
-                />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-end gap-3 sm:gap-4">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="show-images-toggle" className="text-xs sm:text-sm text-muted-foreground cursor-pointer">
+                    Show Images
+                  </Label>
+                  <Switch
+                    id="show-images-toggle"
+                    checked={showImages}
+                    onCheckedChange={setShowImages}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="copy-markdown-toggle" className="text-xs sm:text-sm text-muted-foreground cursor-pointer">
+                    Copy as Markdown
+                  </Label>
+                  <Switch
+                    id="copy-markdown-toggle"
+                    checked={enabled}
+                    onCheckedChange={setEnabled}
+                  />
+                </div>
               </div>
             )}
           </div>

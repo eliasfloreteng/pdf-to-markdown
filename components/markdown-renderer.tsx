@@ -8,6 +8,7 @@ import rehypeKatex from "rehype-katex"
 import { ImageWithActions } from "./image-with-actions"
 import { parseMarkdownIntoBlocks } from "@/lib/markdown-blocks"
 import { useCopyMarkdown } from "@/lib/copy-markdown-context"
+import { useShowImages } from "@/lib/show-images-context"
 import "katex/dist/katex.min.css"
 
 interface MarkdownRendererProps {
@@ -21,6 +22,7 @@ export function MarkdownRenderer({
 }: MarkdownRendererProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { enabled } = useCopyMarkdown()
+  const { enabled: showImages } = useShowImages()
 
   // Parse markdown into blocks with original source
   const blocks = useMemo(() => parseMarkdownIntoBlocks(content), [content])
@@ -182,6 +184,11 @@ export function MarkdownRenderer({
           </blockquote>
         ),
         img: ({ src, alt }) => {
+          // If images are disabled, don't render them
+          if (!showImages) {
+            return null
+          }
+
           // If src matches an image ID in the imageMap, use the base64 data URL
           const srcString = typeof src === "string" ? src : ""
           const imageSrc =
