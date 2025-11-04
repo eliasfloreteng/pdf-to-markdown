@@ -148,7 +148,7 @@ export function ConverterPage() {
         onNewUpload={handleNewUpload}
       />
 
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col min-w-0">
         {!selectedDocument &&
           documents.length === 0 &&
           processingFiles.length === 0 && (
