@@ -77,6 +77,7 @@ bun run lint     # Run ESLint
    - Math equations via remark-math + rehype-katex
    - Image references resolved through `imageMap` (maps image IDs to base64 data URLs)
    - Tables, code blocks, and GFM features supported
+   - **Copy-as-Markdown Feature**: Parses markdown into blocks using `unified` + `remark-parse` (`lib/markdown-blocks.ts`), wraps each block with `data-markdown` attribute containing original source, intercepts copy events to return markdown instead of rendered text. Toggle available in UI (default: ON).
 
 ### Data Types (`lib/types.ts`)
 
