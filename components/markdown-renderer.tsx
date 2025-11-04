@@ -196,13 +196,11 @@ export function MarkdownRenderer({
           const altString = typeof alt === "string" ? alt : ""
 
           return (
-            <div className="w-full max-w-full my-6">
               <ImageWithActions
                 src={imageSrc || "/placeholder.svg"}
                 alt={altString}
                 className="rounded-lg max-w-full w-full h-auto"
               />
-            </div>
           )
         },
           }}
