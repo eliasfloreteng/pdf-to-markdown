@@ -116,12 +116,12 @@ export function ResultsView({ document }: ResultsViewProps) {
                 {copied ? (
                   <>
                     <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span className="hidden xs:inline">Copied</span>
+                    <span className="hidden sm:inline">Copied</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span className="hidden xs:inline">Copy</span>
+                    <span className="hidden sm:inline">Copy</span>
                   </>
                 )}
               </Button>
@@ -133,7 +133,7 @@ export function ResultsView({ document }: ResultsViewProps) {
                 className="gap-1.5 bg-transparent text-xs sm:text-sm flex-1 sm:flex-none"
               >
                 <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Download</span>
+                <span className="hidden sm:inline">Download</span>
               </Button>
 
               <Button
