@@ -2,5 +2,6 @@ services:
   pdf-to-markdown:
     build: .
     restart: unless-stopped
+    env_file: .env.local
     ports:
       - 3000:3000
