@@ -22,6 +22,15 @@ bun run build    # Production build
 bun start        # Start production server
 ```
 
+**Docker Deployment:**
+
+```bash
+docker compose up -d        # Start application in Docker (detached)
+docker compose down         # Stop and remove containers
+docker compose logs -f      # View logs (follow mode)
+docker build -t pdf-to-markdown .  # Build Docker image manually
+```
+
 **Code Quality:**
 
 ```bash
@@ -117,6 +126,41 @@ The application extracts images from PDFs via the Mistral API:
 - Custom img component in markdown renderer handles this mapping
 - Extracted images displayed separately in image gallery
 
+### Docker Deployment
+
+The application supports Docker deployment with the following setup:
+
+**Files:**
+- `Dockerfile`: Multi-stage build using `oven/bun:1` base image
+- `compose.yaml`: Docker Compose configuration with service definition
+- `compose.override.example.yaml`: Example override for customizing port bindings
+- `.dockerignore`: Excludes unnecessary files from Docker build context
+
+**Configuration:**
+- **Build**: Multi-stage build (deps → builder → runner) for optimized image size
+- **Output Mode**: Uses Next.js standalone output with automatic file tracing
+- **Environment**: Requires `MISTRAL_API_KEY` via `.env.local` file (loaded as `env_file` in compose)
+- **Port**: Exposes port 3000 (customizable via compose override)
+- **Restart Policy**: `unless-stopped` for automatic recovery
+- **User**: Runs as non-root user `nextjs` (uid 1001) for security
+- **Volume**: Defines volume at `/app/public/data` for potential data persistence
+
+**Deployment Process:**
+1. Create `.env.local` with `MISTRAL_API_KEY`
+2. Run `docker compose up -d` to build and start
+3. Application available at `http://localhost:3000`
+4. Use `docker compose logs -f` to monitor
+5. Use `docker compose down` to stop
+
+**Port Customization:**
+Create `compose.override.yaml` to override default port binding:
+```yaml
+services:
+  pdf-to-markdown:
+    ports:
+      - 8080:3000
+```
+
 ### Important Notes
 
 - All OCR processing happens server-side via Next.js Server Actions to protect the API key
@@ -124,3 +168,4 @@ The application extracts images from PDFs via the Mistral API:
 - Multi-page PDFs processed as single API call, pages combined with markdown separators
 - Mathematical expressions automatically detected and rendered with KaTeX
 - Base64 encoding used for both file upload and image extraction to avoid file system operations
+- Docker deployment uses Bun runtime for optimal performance and smaller image size

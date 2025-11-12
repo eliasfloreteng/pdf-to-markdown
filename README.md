@@ -60,6 +60,82 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
+### Docker Deployment
+
+The application can be deployed using Docker and Docker Compose.
+
+#### Using Docker Compose (Recommended)
+
+1. Ensure you have Docker and Docker Compose installed
+
+2. Create your `.env.local` file with your Mistral API key:
+
+```bash
+cp .env.local.example .env.local
+# Edit .env.local and add your MISTRAL_API_KEY
+```
+
+3. Start the application:
+
+```bash
+docker compose up -d
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000)
+
+4. View logs:
+
+```bash
+docker compose logs -f
+```
+
+5. Stop the application:
+
+```bash
+docker compose down
+```
+
+#### Using Docker without Compose
+
+1. Build the image:
+
+```bash
+docker build -t pdf-to-markdown .
+```
+
+2. Run the container:
+
+```bash
+docker run -d \
+  --name pdf-to-markdown \
+  -p 3000:3000 \
+  -e MISTRAL_API_KEY=your_api_key_here \
+  --restart unless-stopped \
+  pdf-to-markdown
+```
+
+#### Docker Configuration
+
+- **Base Image**: `oven/bun:1` (Bun runtime)
+- **Build System**: Multi-stage build for optimized image size
+- **Output Mode**: Standalone output with file tracing
+- **Port**: 3000 (exposed)
+- **Environment**: Production mode
+- **Restart Policy**: `unless-stopped` (automatically restarts on failures)
+
+#### Customizing Port Binding
+
+To run on a different port, you can create a `compose.override.yaml` file (see `compose.override.example.yaml`):
+
+```yaml
+services:
+  pdf-to-markdown:
+    ports:
+      - 8080:3000  # Run on port 8080 instead
+```
+
+Or modify the `-p` flag when using `docker run`.
+
 ## Usage
 
 1. **Upload Documents**: Drag and drop or click to select PDF files or images
