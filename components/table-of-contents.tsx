@@ -6,25 +6,16 @@ import { List } from "lucide-react"
 
 interface TableOfContentsProps {
   markdown: string
-  onNavigate?: () => void
+  onNavigate?: (headingId: string) => void
 }
 
 export function TableOfContents({ markdown, onNavigate }: TableOfContentsProps) {
   const headings = useMemo(() => extractHeadings(markdown), [markdown])
 
   const handleClick = (id: string) => {
-    // Switch to document tab
     if (onNavigate) {
-      onNavigate()
+      onNavigate(id)
     }
-
-    // Scroll to the element after a brief delay to ensure tab switch completes
-    setTimeout(() => {
-      const element = document.getElementById(id)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" })
-      }
-    }, 100)
   }
 
   if (headings.length === 0) {

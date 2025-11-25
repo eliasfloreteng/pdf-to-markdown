@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
@@ -84,6 +84,28 @@ export function ResultsView({ document }: ResultsViewProps) {
   }
 
   const [activeTab, setActiveTab] = useState<"document" | "toc" | "images">("document")
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const handleNavigateToHeading = (headingId: string) => {
+    // Switch to document tab first
+    setActiveTab("document")
+
+    // Wait for tab switch and then scroll
+    setTimeout(() => {
+      const element = document.getElementById(headingId)
+      const container = scrollContainerRef.current
+
+      if (element && container) {
+        // Get the element's position relative to the container
+        const elementTop = element.offsetTop
+        // Scroll the container to show the element with some offset for the sticky header
+        container.scrollTo({
+          top: elementTop - 100, // Offset for sticky header
+          behavior: "smooth"
+        })
+      }
+    }, 150)
+  }
 
   return (
     <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "document" | "toc" | "images")} className="flex-1 flex flex-col">
@@ -192,7 +214,7 @@ export function ResultsView({ document }: ResultsViewProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <div ref={scrollContainerRef} className="flex-1 overflow-auto">
         <div className="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
           <TabsContent value="document" className="mt-0">
             <div className="prose prose-sm sm:prose prose-neutral dark:prose-invert max-w-none">
@@ -206,7 +228,7 @@ export function ResultsView({ document }: ResultsViewProps) {
           <TabsContent value="toc" className="mt-0">
             <TableOfContents
               markdown={document.markdown}
-              onNavigate={() => setActiveTab("document")}
+              onNavigate={handleNavigateToHeading}
             />
           </TabsContent>
 
