@@ -204,7 +204,10 @@ export function ResultsView({ document }: ResultsViewProps) {
           </TabsContent>
 
           <TabsContent value="toc" className="mt-0">
-            <TableOfContents markdown={document.markdown} />
+            <TableOfContents
+              markdown={document.markdown}
+              onNavigate={() => setActiveTab("document")}
+            />
           </TabsContent>
 
           <TabsContent value="images" className="mt-0">
