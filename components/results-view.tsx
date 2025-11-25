@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Copy, Download, FileArchive, Upload, Check } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { ImageGallery } from "./image-gallery"
+import { TableOfContents } from "./table-of-contents"
 import { useCopyMarkdown } from "@/lib/copy-markdown-context"
 import { useShowImages } from "@/lib/show-images-context"
 import type { ProcessedDocument } from "@/lib/types"
@@ -82,10 +83,10 @@ export function ResultsView({ document }: ResultsViewProps) {
     }
   }
 
-  const [activeTab, setActiveTab] = useState<"document" | "images">("document")
+  const [activeTab, setActiveTab] = useState<"document" | "toc" | "images">("document")
 
   return (
-    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "document" | "images")} className="flex-1 flex flex-col">
+    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "document" | "toc" | "images")} className="flex-1 flex flex-col">
       <div className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
@@ -151,9 +152,12 @@ export function ResultsView({ document }: ResultsViewProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-            <TabsList className="grid w-full sm:w-auto sm:max-w-md grid-cols-2">
+            <TabsList className="grid w-full sm:w-auto sm:max-w-md grid-cols-3">
               <TabsTrigger value="document" className="text-xs sm:text-sm">
                 Document
+              </TabsTrigger>
+              <TabsTrigger value="toc" className="text-xs sm:text-sm">
+                Contents
               </TabsTrigger>
               <TabsTrigger value="images" className="text-xs sm:text-sm">
                 Images ({document.images.length})
@@ -197,6 +201,10 @@ export function ResultsView({ document }: ResultsViewProps) {
                 imageMap={document.imageMap}
               />
             </div>
+          </TabsContent>
+
+          <TabsContent value="toc" className="mt-0">
+            <TableOfContents markdown={document.markdown} />
           </TabsContent>
 
           <TabsContent value="images" className="mt-0">
