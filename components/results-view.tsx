@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Copy, Download, FileArchive, Upload, Check } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { ImageGallery } from "./image-gallery"
+import { TableOfContents } from "./table-of-contents"
 import { useCopyMarkdown } from "@/lib/copy-markdown-context"
 import { useShowImages } from "@/lib/show-images-context"
 import type { ProcessedDocument } from "@/lib/types"
@@ -82,10 +83,32 @@ export function ResultsView({ document }: ResultsViewProps) {
     }
   }
 
-  const [activeTab, setActiveTab] = useState<"document" | "images">("document")
+  const [activeTab, setActiveTab] = useState<"document" | "toc" | "images">("document")
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const handleNavigateToHeading = (headingId: string) => {
+    // Switch to document tab first
+    setActiveTab("document")
+
+    // Wait for tab switch and then scroll
+    setTimeout(() => {
+      const element = document.getElementById(headingId)
+      const container = scrollContainerRef.current
+
+      if (element && container) {
+        // Get the element's position relative to the container
+        const elementTop = element.offsetTop
+        // Scroll the container to show the element with some offset for the sticky header
+        container.scrollTo({
+          top: elementTop - 100, // Offset for sticky header
+          behavior: "smooth"
+        })
+      }
+    }, 150)
+  }
 
   return (
-    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "document" | "images")} className="flex-1 flex flex-col">
+    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "document" | "toc" | "images")} className="flex-1 flex flex-col">
       <div className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
@@ -151,9 +174,12 @@ export function ResultsView({ document }: ResultsViewProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-            <TabsList className="grid w-full sm:w-auto sm:max-w-md grid-cols-2">
+            <TabsList className="grid w-full sm:w-auto sm:max-w-md grid-cols-3">
               <TabsTrigger value="document" className="text-xs sm:text-sm">
                 Document
+              </TabsTrigger>
+              <TabsTrigger value="toc" className="text-xs sm:text-sm">
+                Contents
               </TabsTrigger>
               <TabsTrigger value="images" className="text-xs sm:text-sm">
                 Images ({document.images.length})
@@ -188,7 +214,7 @@ export function ResultsView({ document }: ResultsViewProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <div ref={scrollContainerRef} className="flex-1 overflow-auto">
         <div className="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
           <TabsContent value="document" className="mt-0">
             <div className="prose prose-sm sm:prose prose-neutral dark:prose-invert max-w-none">
@@ -197,6 +223,13 @@ export function ResultsView({ document }: ResultsViewProps) {
                 imageMap={document.imageMap}
               />
             </div>
+          </TabsContent>
+
+          <TabsContent value="toc" className="mt-0">
+            <TableOfContents
+              markdown={document.markdown}
+              onNavigate={handleNavigateToHeading}
+            />
           </TabsContent>
 
           <TabsContent value="images" className="mt-0">

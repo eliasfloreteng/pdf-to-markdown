@@ -27,6 +27,43 @@ export function MarkdownRenderer({
   // Parse markdown into blocks with original source
   const blocks = useMemo(() => parseMarkdownIntoBlocks(content), [content])
 
+  // Helper function to generate slug from heading text
+  const slugify = (text: string): string => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "")
+  }
+
+  // Track slug counts to ensure unique IDs
+  const slugCounts = useRef<Map<string, number>>(new Map())
+
+  // Reset slug counts when content changes
+  useEffect(() => {
+    slugCounts.current = new Map()
+  }, [content])
+
+  // Helper to extract text from children
+  const extractText = (children: any): string => {
+    if (typeof children === "string") return children
+    if (Array.isArray(children)) {
+      return children.map(extractText).join("")
+    }
+    if (children?.props?.children) {
+      return extractText(children.props.children)
+    }
+    return ""
+  }
+
+  // Helper to generate unique ID
+  const generateId = (text: string): string => {
+    const baseSlug = slugify(text)
+    const count = slugCounts.current.get(baseSlug) || 0
+    slugCounts.current.set(baseSlug, count + 1)
+    return count > 0 ? `${baseSlug}-${count}` : baseSlug
+  }
+
   // Set up copy event handler
   useEffect(() => {
     const container = containerRef.current
@@ -111,21 +148,33 @@ export function MarkdownRenderer({
             remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
             rehypePlugins={[rehypeKatex]}
             components={{
-        h1: ({ children }) => (
-          <h1 className="text-3xl font-bold text-foreground mt-8 mb-4 text-balance">
-            {children}
-          </h1>
-        ),
-        h2: ({ children }) => (
-          <h2 className="text-2xl font-semibold text-foreground mt-6 mb-3 text-balance">
-            {children}
-          </h2>
-        ),
-        h3: ({ children }) => (
-          <h3 className="text-xl font-semibold text-foreground mt-4 mb-2">
-            {children}
-          </h3>
-        ),
+        h1: ({ children }) => {
+          const text = extractText(children)
+          const id = generateId(text)
+          return (
+            <h1 id={id} className="text-3xl font-bold text-foreground mt-8 mb-4 text-balance scroll-mt-24">
+              {children}
+            </h1>
+          )
+        },
+        h2: ({ children }) => {
+          const text = extractText(children)
+          const id = generateId(text)
+          return (
+            <h2 id={id} className="text-2xl font-semibold text-foreground mt-6 mb-3 text-balance scroll-mt-24">
+              {children}
+            </h2>
+          )
+        },
+        h3: ({ children }) => {
+          const text = extractText(children)
+          const id = generateId(text)
+          return (
+            <h3 id={id} className="text-xl font-semibold text-foreground mt-4 mb-2 scroll-mt-24">
+              {children}
+            </h3>
+          )
+        },
         p: ({ children }) => (
           <p className="text-foreground leading-relaxed mb-4 text-pretty">
             {children}
